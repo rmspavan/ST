@@ -1,0 +1,118 @@
+System Requirements for Installing Ansible AWX Server
+2GB of memory
+2 cpu cores
+20GB of space
+
+
+Step 1./ Install required packages
+
+01- First, we need to install the EPEL Repository as below:
+
+$ dnf install epel-release -y
+
+02- Second, we need to install some dpendencies packages like ansible:
+
+$ dnf install git gcc gcc-c++ nodejs gettext device-mapper-persistent-data lvm2 bzip2 python3-pip ansible
+
+Step 2./ Install Docker
+
+01- To install Docker, first, we need to install the Docker repository, so use the following command:
+
+$ dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+02- Next, use the below command to install docker-ce package:
+
+$ dnf install docker-ce --nobest -y
+
+03- Once the installation finished, let’s enable and start the Docker daemon:
+
+# systemctl enable --now docker.service
+
+Step 3./ Install Docker-compose tool
+01- First, set python3 as the default one by running the below command:
+
+$ alternatives --set python /usr/bin/python3
+
+02- Next, use pip3 command to install the docker-compose tool:
+
+$ pip3 install docker-compose
+
+Step 4./ Install Ansible AWX
+
+01- Now we can finally install Ansible AWX. Clone the latest release with the command:
+
+$ git clone -b "17.1.0" https://github.com/ansible/awx.git
+
+02- Next, generate a secret encryption key with the command:
+
+$ openssl rand -base64 30
+PblrUyeSvBMVWqHaaDMFcABcjzgG5dAhfeOgge4S
+
+03- navigate to the awx/installer directory and locate the inventory file. We need to adjust a few parameters:
+
+$ cd awx/installer/
+$ vi inventory
+
+Note: To persist the postgres data and the Ansible Awx, we already mounted partition to the directory /myawx
+[all:vars]
+dockerhub_base=ansible
+awx_task_hostname=awx
+awx_web_hostname=awxweb
+postgres_data_dir="/myawx/pgdocker"
+host_port=80
+host_port_ssl=443
+docker_compose_dir="/myawx/awxcompose"
+pg_username=awx
+pg_password=awxpass
+pg_database=awx
+pg_port=5432
+admin_user=admin
+admin_password=password
+create_preload_data=True
+secret_key=PblrUyeSvBMVWqHaaDMFcABcjzgG5dAhfeOgge4S
+awx_official=true
+project_data_dir=/myawx/projects
+
+
+04- So, to install Ansible AWX run the Ansible command:
+
+$ ansible-playbook -i inventory install.yml
+
+05- After the installation is done, you can check the containers created by the docker-compose as below:
+
+$ docker ps
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                  NAMES
+05e67f321693        ansible/awx_task:11.2.0   "tini -- /bin/sh -c …"   10 seconds ago      Up 7 seconds        8052/tcp               awx_task
+26cbdca749ae        ansible/awx_web:11.2.0    "tini -- /bin/sh -c …"   12 seconds ago      Up 9 seconds        0.0.0.0:80->8052/tcp   awx_web
+ed03af85f7fa        memcached:alpine          "docker-entrypoint.s…"   17 seconds ago      Up 11 seconds       11211/tcp              awx_memcached
+4140dad07ece        redis                     "docker-entrypoint.s…"   17 seconds ago      Up 11 seconds       6379/tcp               awx_redis
+5ccd44ed6285        postgres:10               "docker-entrypoint.s…"   17 seconds ago      Up 12 seconds       5432/tcp               awx_postgres
+
+06- In Case that the firewalld is enabled and running, then use the below commands to allow the http port (80) and https (443):
+
+$ sudo firewall-cmd --zone=public --add-masquerade --permanent
+$ sudo firewall-cmd --permanent --add-service=http
+$ sudo firewall-cmd --permanent --add-service=https
+$ sudo firewall-cmd --reload
+
+07- If the Selinux enabled, use the below commands to Allow the Awx web server to access the network:
+
+$ semanage port -a -t http_port_t -p tcp 8052
+$ setsebool -P httpd_can_network_connect 1
+
+Accessing Ansible AWX Web GUI
+
+01- To access AWX web console, open your browser and type in your AAnsible’s AWX server IP: http://awx-server-ip-address
+
+how-to-install-ansible-awx-centos-8-web-gui
+
+02- Finally, provide the username and password that been setup and you login to Ansible AWX dashboard:
+
+How to install ansible awx on centos 8
+
+Conclusion
+You have successfully installed Ansible Awx on your CentOS 8 server. You might want to check the following guides :
+
+How to Install and Configure Tower-cli Tool
+How to add a new inventory, create a Host and Credential in AWX Ansible Tower
+How to Create a Project in AWX / Ansible Tower

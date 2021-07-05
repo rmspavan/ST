@@ -1,0 +1,58 @@
+to check DB owner:
+
+docker exec awx_postgres psql -U awx -l
+
+
+Backup the dump form container:
+
+docker exec -t awx_postgres pg_dumpall -c -U awx > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+
+restore:
+
+cat your_dump.sql | docker exec -i awx_postgres psql -U awsx
+
+to check owner:
+
+docker exec awx_postgres psql -U awx -l
+
+
+
+Install PGSql:
+
+1. dnf module list postgresql
+2. sudo dnf module enable postgresql:10
+3. sudo dnf install postgresql-server
+4. sudo postgresql-setup --initdb
+5. sudo systemctl start postgresql
+6. sudo systemctl enable postgresql
+
+
+Create PostgreSQL Roles and Databases:
+1. sudo -i -u postgres
+2. sudo -u postgres createuser --interactive (rolename: awx, with superuser role )
+3. createdb awx
+4. sudo adduser awx
+4. psql -d awx
+5. \conninfo
+6. \d
+
+To restore:
+
+ psql -U postgres -d awx -1 -f dump_05-07-2021_02_24_27.sql
+
+List owner and database:
+
+ psql -U postgres -l
+
+To check AWX DB:
+
+1. psql
+2. psql awx
+3. \conninfo
+4. \d
+
+
+
+
+
