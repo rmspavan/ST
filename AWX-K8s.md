@@ -1,20 +1,17 @@
-Links:
 https://github.com/ansible/awx-operator
-https://github.com/ansible/awx-operat...
-
-If you like the demo, hit subscribe for more videos like this and give it a like.
+https://github.com/ansible/awx-operator/tags
 
 COMMANDS:
 
 Setup the repo's:
-curl -LO https://storage.googleapis.com/kubern...`curl -s https://storage.googleapis.com/kubern...`/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 kubectl version --client
 sudo apt-get update -y &&  sudo apt-get install -y docker.io
 
 Install minikube:
-curl -Lo minikube https://storage.googleapis.com/miniku... && chmod +x minikube && sudo mv minikube /usr/local/bin/
+curl -Lo minikube https://storage.googleapis.com/minikube/release/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
 sudo usermod -aG docker $USER
 LOGOUT & BACK IN AGAIN
@@ -29,7 +26,7 @@ kubectl get pods
 kubectl get pods -A
 
 Install the awx-operator:
-kubectl apply -f https://raw.githubusercontent.com/ans...
+kubectl apply -f https://raw.githubusercontent.com/ansible/awx-operator/0.10.0/deploy/awx-operator.yaml
 kubectl get pods
 
 Create the deployment file:
@@ -43,12 +40,17 @@ spec:
   service_type: nodeport
   ingress_type: none
   hostname: awx-demo.example.com
-
+  
+kubectl get po
+ 
 Run the deployment:
 kubectl apply -f awx-demo.yml
 kubectl get pods -l "app.kubernetes.io/managed-by=awx-operator"
 kubectl get svc -l "app.kubernetes.io/managed-by=awx-operator"
 WAIT A FEW MINS... check again...
+kubectl get svc
+minikube tunnel (ti check LB)
+
 
 Get the Admin user password:
 kubectl get secrets
