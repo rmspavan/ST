@@ -2,6 +2,8 @@ yum info httpd
 
 yum install httpd
 
+yum install httpd-devel
+
 systemctl start httpd
 
 systemctl enable httpd
@@ -14,6 +16,14 @@ systemctl status firewalld
 firewall-cmd --permanent --zone=public --add-port=80/tcp
 
 systemctl restart firewalld
+
+netstat -tupan | grep -i http
+
+ps aux | grep -i [h]ttp
+
+httpd -t
+
+httpd -v
 
 ###################################################################
 
@@ -154,8 +164,8 @@ vi /var/www/html/index.html
 
 This is server1, Howdy!
 
-sudo  firewall-cmd –zone=public –add-port=80/tcp –permanent
-sudo firewall-cmd –reload
+sudo  firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --reload
 
 WS2
 ---
@@ -193,3 +203,22 @@ httpd -t
 
 sudo service httpd restart
 
+
+/usr/sbin/setsebool -P httpd_can_network_connect 1
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Reverse Proxy
+=============
+
+<VirtualHost *:80>
+    ProxyPreserveHost On
+
+    ProxyPass / http://10.170.1.17:80/
+    ProxyPassReverse / http://10.170.1.17:80/
+
+    ServerName 10.170.1.16
+</VirtualHost>
+
+cat /var/log/httpd/error_log
