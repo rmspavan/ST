@@ -1,0 +1,195 @@
+yum info httpd
+
+yum install httpd
+
+systemctl start httpd
+
+systemctl enable httpd
+
+systemctl status httpd
+
+
+systemctl status firewalld
+
+firewall-cmd --permanent --zone=public --add-port=80/tcp
+
+systemctl restart firewalld
+
+###################################################################
+
+Install apache via tar file (GCC and development tools/ Apr/ Apr-utils/ expat/ PCRE/ Openssl)
+
+
+
+yum install wget make gcc openssl-devel pcre-devel w3m
+
+yum groupintall "Development Tools'
+
+
+cd /opt/ 
+
+wget https://downloads.apache.org//apr/apr-1.7.0.tar.gz
+
+wget https://downloads.apache.org//apr/apr-util-1.6.1.tar.gz
+
+wget https://github.com/libexpat/libexpat/releases/download/R_2_4_1/expat-2.4.1.tar.gz
+
+wget https://ftp.pcre.org/pub/pcre/pcre-8.00.tar.gz
+
+wget https://www.openssl.org/source/openssl-3.0.0-beta2.tar.gz
+
+wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1j.tar.gz
+
+wget https://downloads.apache.org//httpd/httpd-2.4.48.tar.gz
+
+
+
+tar -zxvf openssl-1.1.1j.tar.gz  $ cd openssl-1.1.1j  $ ./config -fPIC --openssldir=/DATA/Apache2448/Openssl  $ make  $ make install
+
+tar -zxvf apr-1.7.0.tar.gz       $ cd apr-1.7.0  $ ./configure --prefix=/DATA/Apache2448/apr  $ make  $ make install
+
+tar -zxvf expat-2.4.1.tar.gz     $ cd expat-2.4.1  $ ./configure --prefix=/DATA/Apache2448/expat   $ make  $ make install
+
+tar -zxvf apr-util-1.6.1.tar.gz  $ cd httpd-2.4.48.tar.gz  $ ./configure --prefix=/DATA/Apache2448/aprutil --with-apr=/DATA/Apache2448/apr --with-expat=/DATA/Apache2448/expat   $ make  $ make install
+
+tar -zxvf pcre-8.00.tar.gz       $ cd pcre-8.00  $ ./configure --prefix=/DATA/Apache2448/pcre   $ make  $ make install
+
+ll /DATA/Apache2448/
+
+tar -zxvf httpd-2.4.48.tar.gz    $ cd httpd-2.4.48  $ ./configure --prefix=/DATA/Apache2448  --with-apr=/DATA/Apache2448/apr --with-apr-util=/DATA/Apache2448/aprutil  --with-pcre=/DATA/Apache2448/pcre --with-ssl=/DATA/Apache2448/Openssl  $ make $ make install
+
+ll /DATA/Apache2448/
+
+
+/DATA/Apache2448/bin/apachectl start
+
+ps aux | grep -i httpd
+
+open browser and check
+
+
+#############################################################
+
+yum groupinstll 'Development Tools'
+
+
+cd /etc/httpd/
+
+dir or ll
+
+/etc/httpd/conf.modules.d --- modules
+
+cat /etc/httpd/conf/httpd.conf --- httpf conf file
+
+vi /etc/mime.types -- extensions
+
+###create sample webpage
+
+cd /var/www/html
+
+vi index.hml
+
+<html>
+this is my test page
+
+</html>
+
+systemctl restart httpd
+
+
+*********************************************************
+
+Logs in apache (Access.log/Error.log/Custom.log)
+
+Access.log
+----------
+
+tail -f 
+
+*********************************************************
+
+Core Modules ( core/mpm_common/ event/ mpm_netware/ mpmt_os2/ prefork/ mpm_winnt/ worker)
+
+
+
+
+
+###################################################################
+
+HA- LB using Apache2
+--------------------
+
+ps aux | grep -i httpd
+
+Enable modules in httpd.conf
+
+<VirtualHost *.80>
+
+ServerName example.com
+   ProxyPreserveHost     On
+       <Proxy "balancer://mycluster">
+	      BalancerMember http://localhost:8080/myapp route=tc1
+		  BalancerMember http://localhost:9090/myapp route=tc2
+       </Proxy>
+   ProxyPass /   balancer://mycluster/
+   ProxyPassReverse / balancer://mycluster/
+
+</VirtualHost>
+
+################################################################################################
+
+other menthod:
+==============
+
+Launch 3vm's and install httpd
+
+1. LBServer
+2. webserver1
+3. webserver2
+
+
+WS1  
+---
+vi /var/www/html/index.html
+
+This is server1, Howdy!
+
+sudo  firewall-cmd –zone=public –add-port=80/tcp –permanent
+sudo firewall-cmd –reload
+
+WS2
+---
+vi /var/www/html/index.html
+
+This is server2, Howdy!
+
+sudo  firewall-cmd –zone=public –add-port=80/tcp –permanent
+sudo firewall-cmd –reload
+
+LBSERVER:
+==========
+
+sudo  firewall-cmd –zone=public –add-port=80/tcp –permanent
+sudo firewall-cmd –reload
+
+sudo vi /etc/httpd/conf.modules.d/00-proxy.conf
+
+sudo vi /etc/httpd/conf.d/default-site.conf
+
+
+<VirtualHost *:80>
+<Proxy balancer://mycluster>
+    BalancerMember http://Your-Ip-Address-Here:80
+    BalancerMember http://Your-Ip-Address-Here:80
+</Proxy>
+
+   ProxyPreserveHost On
+
+   ProxyPass / balancer://mycluster/
+   ProxyPassReverse / balancer://mycluster/
+</VirtualHost>
+
+httpd -t
+
+sudo service httpd restart
+
