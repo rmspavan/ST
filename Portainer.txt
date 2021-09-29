@@ -1,0 +1,20 @@
+Deploy Portainer standalone on Docker
+- docker volume create portainer_data
+- docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+docker run -d -p 9001:9001 --name portainer_agent --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes portainer/agent
+
+
+Deploy the Docker Swarm agent
+- curl -L https://downloads.portainer.io/agent-... -o agent-stack.yml && docker stack deploy --compose-file=agent-stack.yml portainer-agent
+- docker service ls
+
+
+Deploy the Kubernetes NodePort agent
+- curl -L https://downloads.portainer.io/portai... -o portainer-agent-k8s.yaml; kubectl apply -f portainer-agent-k8s.yaml
+- kubectl get pods --namespace=portainer
+
+
+Deploy Docker standalone
+
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes -v /:/host -v portainer_agent_data:/data --restart always -e EDGE=1 -e EDGE_ID=d8499f40-1a3b-496b-a566-621d6a9c6c90 -e EDGE_KEY=aHR0cDovLzE5Mi4xNjguMS45MDo5MDAwfDE5Mi4xNjguMS45MDo4MDAwfDM2OmNiOmVmOjhhOjU2OjZhOmQ1OjM3OjJmOjE3OjQyOjA4OmJjOjliOjE4OmI0fDM -e CAP_HOST_MANAGEMENT=1 --name portainer_edge_agent portainer/agent

@@ -1,0 +1,128 @@
+
+install Java on RHEL / CentOS server.
+
+Step 2: Create tomcat user and group
+We nee to add user dedicated to running tomcat service.
+
+sudo groupadd --system tomcat
+sudo useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
+
+
+Step 3: Install Tomcat 8/9/10 on Linux RHEL / CentOS 8
+
+cd /usr/share/tomcat
+
+sudo yum -y install wget
+export VER="9.0.48"
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v${VER}/bin/apache-tomcat-${VER}.tar.gz
+
+or 
+
+wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.71/bin/apache-tomcat-8.5.71.tar.gz
+wget https://archive.apache.org/dist/tomcat/tomcat-8/v${VER}/bin/apache-tomcat-${VER}.tar.gz
+
+
+sudo tar xvf apache-tomcat-${VER}.tar.gz
+
+mv apache-tomcat-${VER}.tar.gz tomcat
+
+sudo chown -R tomcat:tomcat /usr/share/tomcat
+
+
+sudo vi /etc/systemd/system/tomcat.service
+
+[Unit]
+Description=Tomcat Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment='JAVA_OPTS=-Djava.awt.headless=true'
+Environment=CATALINA_HOME=/usr/share/tomcat
+Environment=CATALINA_BASE=/usr/share/tomcat
+Environment=CATALINA_PID=/usr/share/tomcat/temp/tomcat.pid
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M'
+ExecStart=/usr/share/tomcat/bin/catalina.sh start
+ExecStop=/usr/share/tomcat/bin/catalina.sh stop
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+
+
+
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+
+
+
+find / -name context.xml
+
+comment the value className
+
+vi /usr/share/tomcat/webapps/host-manager/META-INF/context.xml
+vi /usr/share/tomcat/webapps/manager/META-INF/context.xml
+
+
+add the user roles:
+
+vi /usr/share/tomcat/conf/tomcat-users.xml
+
+<role rolename="admin-gui"/>
+<role rolename="manager-gui"/>
+<user username="admin" password="admin" fullName="Administrator" roles="admin-gui,manager-gui"/>
+
+
+sudo systemctl restart tomcat
+
+
+======================================================================================================
+
+
+sudo yum -y install httpd 
+
+Create VirtualHost for accessing Tomcat Admin web interface – 
+
+vi /etc/httpd/conf.d/tomcat_manager.conf
+
+<VirtualHost *:80>
+    ServerAdmin root@localhost
+    ServerName tomcat.example.com
+    DefaultType text/html
+    ProxyRequests off
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
+</VirtualHost>
+
+
+For AJP connector, it will be configuration like this:
+
+<VirtualHost *:80>
+  ServerName example.com
+
+  ProxyRequests Off
+  ProxyPass / ajp://localhost:8009/
+  ProxyPassReverse / ajp://localhost:8009/
+</VirtualHost>
+
+
+Configure SELinux for Apache to access Tomcat.
+
+sudo setsebool -P httpd_can_network_connect 1
+sudo setsebool -P httpd_can_network_relay 1
+sudo setsebool -P httpd_graceful_shutdown 1
+sudo setsebool -P nis_enabled 1
+
+
+sudo systemctl restart httpd && sudo systemctl enable httpd
+

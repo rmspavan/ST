@@ -1,0 +1,1009 @@
+The first column represents the file type and file permissions. Every file row begins with the file type and then specifies the access permissions associated with the files. These are the following types of files with their specific characters:
+Regular file (-)
+Directory (d)
+Link (l)
+Special File (c)
+Socket (s)
+Named pipe (p)
+Block device (b)
+The second column represents the number of memory blocks.
+The third column represents the owner of the file or the superuser, who has the administrating power.
+The fourth column represents the group of owner/superuser.
+The fifth column represents the file size.
+The sixth column represents the date and time when the file was created or lastly modified.
+The last column represents the name of the file or the directory.
+
+
+
+#! /bin/bash  
+# This is the basic bash script  
+echo " Hello World! " 
+
+
+===>>To create multiple file with data <<=========================
+
+#!/bin/bash
+for i in {000..10}
+do
+    echo hello > "File${i}.txt"
+done
+
+****************************************************
+
+#!/bin/bash
+
+if [ "$1" = "" ]; then
+  echo "Usage: $0 <number of files to create>"
+  exit 1
+fi
+
+now=`date '+%Y-%m-%d_%H%M%S'`
+prefix="${now}_myFilePrefix"
+echo "creating $1 files"
+echo "now=$now"
+
+for i in $(seq 1 $1); do file="${prefix}_${i}.log"; echo "creating $file"; touch $file; done
+===============================================
+
+#!/bin/bash  
+#This is a single-line comment in Bash Script.  
+echo "Enter your name:"  
+read $name  
+echo  
+#echo output, its also a single line comment  
+echo "The current user name is $name"  
+
+
+#!/bin/bash  
+# multi line comment  
+: '  
+This is the first comment  
+This is the second comment  
+This is the third comment  
+'  
+  
+echo "Hello World"  
+
+
+
+#!/bin/bash  
+# multi line comment
+<<COMMENTS  
+    This is the first comment  
+    This is the second comment  
+    This is the third comment  
+COMMENTS  
+  
+echo "Hello World"  
+
+
+#!/bin/bash  
+  
+# String in single quote  
+echo 'Hello User'  
+echo  
+# String in double quote  
+echo "we are user1" 
+
+
+#!/bin/bash  
+echo  
+echo "When single quote is used with string:"  
+invitation='Welcome to javatpoint'  
+echo $invitation  
+echo  
+echo "When double quote is used with string:"  
+invitation="Welcome to javatpoint"  
+echo $invitation  
+echo  
+echo "When variable is used with double quote:"  
+Remark="Hello User!, $invitation"  
+echo $Remark  
+echo  
+echo "When variable is used with single quote:"  
+Remark='Hello User!, $invitation'  
+echo $Remark  
+echo  
+
+
+
+#! /bin/bash  
+# Bash System-defined Variables  
+echo $HOME # Home Directory  
+echo $PWD # current working directory  
+echo $BASH # Bash shell name  
+echo $BASH_VERSION # Bash shell Version  
+echo $LOGNAME # Name of the Login User  
+echo $OSTYPE # Type of OS  
+
+
+
+#!/bin/sh
+# This is a comment!
+echo "Hello      World"       # This is a comment, too!
+echo "Hello World"
+echo "Hello * World"
+echo Hello * World
+echo Hello      World
+echo "Hello" World
+echo Hello "     " World
+echo "Hello "*" World"
+echo `hello` world
+echo 'hello' world
+
+
+=====================================
+1) Simple Hello World Script
+
+touch firstscript.sh
+
+#!/bin/bash
+
+echo "Hello World"
+
+chmod +x firstscript.sh
+
+./firstscript.sh
+
+-------------------------------------------
+2) Echo cmd without new lines
+
+#!/bin/bash
+
+echo -n "Hello"
+echo "World"
+
+echo -n "No"
+
+echo "NewLines"
+
+----------------------------------------------
+3) String Concatenation With Echo 
+
+#!/bin/bash
+
+echo "one" "two" "three"
+
+----------------------------------------------- 
+4) String Continuation Character
+
+#!/bin/bash
+
+echo "one" "two" "three" \
+      "four" "five" \
+	  "six"
+------------------------------------------------
+5) Echo with Tab Characters 
+
+#!/bin/bash
+
+echo -e "one\ttwo\tthree\tfour"  #t-tab
+-----------------------------------------------
+6) Echo with Newline Characters 
+
+#!/bin/bash
+
+echo -e "one\ntwo\nthree\nfour"  #n-newline
+
+-----------------------------------------------
+7) Echo with -x to Display All Commands
+
+#!/bin/bash -x 
+# -x to display cmd's
+
+echo "one"
+echo "two" 
+echo "three"
+----------------------------------------------------
+8) Printing Strings That Contain Single Quotes
+
+#!/bin/bash
+
+echo "Welcome to abc's BBQ" 
+
+--------------------------------------------------------
+
+9) Printing Strings That Contain Double Quotes
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" 
+
+-----------------------------------------------------------
+10) Write to a File from Inside A Script 
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+----------------------------------------------------------
+11) Overwrite to a File from Inside A Script
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+echo "My Favorite book is think and grow rich" > ./file.txt
+
+----------------------------------------------------------
+12) Append to File Inside Script 
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+echo "My Favorite book is think and grow rich" >> ./file.txt
+
+echo "My Favorite car is AUDI" >> ./file.txt
+----------------------------------------------------------
+
+13) Single Line Comments 
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+#echo "My Favorite book is think and grow rich" >> ./file.txt
+
+echo "My Favorite car is AUDI" >> ./file.txt
+
+------------------------------------------------------------------
+
+14) Comments From Middle of Line
+
+#!/bin/bash
+
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+echo "My Favorite book is think and grow rich" #>> ./file.txt
+
+echo "My Favorite car is AUDI" >> ./file.txt
+
+------------------------------------------------------------------
+15) Multi Line Comments Using Heredocs 
+
+#!/bin/bash
+
+<<LINUXHIST_MESSAGE
+echo "My Favorite movie is \"Avengers\"" > ./file.txt
+
+echo "My Favorite book is think and grow rich" >> ./file.txt
+
+LINUXHIST_MESSAGE
+
+echo "My Favorite car is AUDI" > ./file.txt
+
+------------------------------------------------------------------
+16) Simple Variable Usage 
+
+#!/bin/bash
+
+VAR="Hello World!"
+echo $VAR
+
+-------------------------------------------------------------------
+17) Multi Word Variables Combinations with Quotes
+
+#!/bin/bash
+
+a='this is a car'
+b=',name is AUDI'
+
+c= "${a} ${b}"
+echo "${c}"
+
+-------------------------------------------------------------------
+18) HOME variable 
+
+#!/bin/bash
+
+VAR_PATH=$Home
+echo "$VAR_PATH"
+
+ls "$VAR_PATH"
+
+-------------------------------------------------------------------
+19) USER variable 
+
+#!/bin/bash
+
+VAR=$USER
+echo "$VAR"
+
+-------------------------------------------------------------------
+20) HOSTNAME variable 
+
+#!/bin/bash
+
+VAR=$HOSTNAMECTL
+echo "$VAR"
+
+-------------------------------------------------------------------
+21) Echo $HOME with Escape to Avoid Expansion 
+
+#!/bin/bash
+
+echo "\$HOME"
+-----------------------------------------------------------------------
+22) Writing to file in HOME Directory Using HOME Environment Variable 
+
+#!/bin/bash
+
+cd $HOME
+echo "I like TATA MOTORS" > test.txt
+cat test.txt
+
+------------------------------------------------------------------------- 
+23) Simple Touch Command 
+
+#!/bin/bash
+
+touch filetouch.txt
+ls
+
+-------------------------------------------------------------------------
+24) Create a Symbol Link, Write To Linked File, Cat file 
+
+#!/bin/bash
+
+ln -s file.txt link1
+ls
+echo "Now I am writing inside the link1" >> link1
+cat link1
+
+---------------------------------------------------------------------------
+25) Chmod Command, Make Executable 
+
+#!/bin/bash
+chmod +x script1.sh #create .sh file before execute
+
+---------------------------------------------------------------------------
+26) Chmod Command, Make Not-Writable, Try to Write to it
+
+# create file.txt --> welcome the NewWorld
+#!/bin/bash
+chmod -w file.txt
+
+---------------------------------------------------------------------------
+27) Chown File To Different User, Run ls before, after 
+
+#!/bin/bash
+sudo chown user1 file.txt
+
+---------------------------------------------------------------------------
+28) Underscore Variable, Touch File, Use Underscore Variable to Append to It 
+
+#!/bin/bash
+
+UND_VAR= "Hello World"
+touch new.txt
+echo "$UND_VAR" >> new.txt
+cat new.txt
+---------------------------------------------------------------------------
+29) Let Command Arithmetic 
+
+#!/bin/bash
+
+let a=3 b=7 c=a+bash
+echo "$a $b $c"
+
+---------------------------------------------------------------------------
+30) 4 Basic Operators, Add, Subtract, Multiply, Divide 
+
+#!/bin/bash
+
+num1=10
+num2=2
+
+expr $num1 + $num2
+expr $num1 - $num2
+expr $num1 \* $num2
+expr $num1 / $num2
+
+---------------------------------------------------------------------------
+31)Increment a variable 3 times with Increment Operator 
+
+#!/bin/bash
+
+VAR=1
+
+echo "$VAR"
+VAR=$((VAR+=1))
+echo "$VAR"
+
+VAR=$((VAR+=1))
+echo "$VAR"
+
+VAR=$((VAR+=1))
+echo "$VAR"
+
+---------------------------------------------------------------------------
+32) Decrement a variable 3 times with Decrement Operator 
+
+#!/bin/bash
+
+VAR=5
+
+echo "$VAR"
+VAR=$((VAR-=1))
+echo "$VAR"
+
+VAR=$((VAR-=1))
+echo "$VAR"
+
+VAR=$((VAR-=1))
+echo "$VAR"
+
+---------------------------------------------------------------------------
+33) Echo Number Modulus Second Number 
+
+#!/bin/bash
+
+num1=4 or 5
+num2=2
+
+echo "$(($num1 % $num2))"
+
+---------------------------------------------------------------------------
+34) Echo Number to Exponent of Second Number 
+
+#!/bin/bash
+
+var=$((8**2))
+
+echo "$var"
+
+---------------------------------------------------------------------------
+35) Expr Command for Math 
+
+#!/bin/bash
+
+num1=25
+num2=5
+
+expr $num1 + $num2
+expr $num1 - $num2
+expr $num1 \* $num2
+expr $num1 / $num2
+expr $num1 % $num2
+
+---------------------------------------------------------------------------
+36) Double Parenthesis for Math 
+
+#!/bin/bash
+
+num1=100
+num2=10
+
+echo "$(($num1 + $num2))"
+echo "$(($num1 - $num2))"
+echo "$(($num1 * $num2))"
+echo "$(($num1 / $num2))"
+echo "$(($num1 % $num2))"
+
+---------------------------------------------------------------------------
+37) Double Parenthesis with Dollar Operator Assign to Variable 
+
+#!/bin/bash
+
+num1=100
+
+VAR=$((num1+10))
+
+echo "$VAR"
+
+---------------------------------------------------------------------------
+38) Multiplication has Precedence Over Addition Regardless of Order 
+
+#!/bin/bash
+
+VAR=$((3*(2+1)))
+echo "$VAR"
+
+NEW=$(((2+1)*3))
+echo "$NEW"
+
+
+---------------------------------------------------------------------------
+39) Combine Two Strings In One Line With Variables 
+
+#!/bin/bash
+
+VAR1="Hello World"
+VAR2= "Let's concatenate"
+
+VAR3="${VAR1} ${VAR2}"
+
+echo "$VAR3"
+---------------------------------------------------------------------------
+40) Combine Three Strings In One Line With Variables 
+
+#!/bin/bash
+
+VAR1="Hello World"
+VAR2="Let's concatenate"
+VAR3= "Lets do it again"
+VAR4="${VAR1} ${VAR2} ${VAR3}"
+
+echo "$VAR4"
+
+---------------------------------------------------------------------------
+41) Plus Equal Operator Combine Strings 
+
+#!/bin/bash
+
+VAR1="Hello World"
+VAR2="Let's concatenate"
+
+VAR1+="$VAR2"
+echo "$VAR1"
+
+---------------------------------------------------------------------------
+42) Create Multi-Line String Variable with HEREDOC 
+
+#!/bin/bash
+
+VAR=$(cat<<'END_HEREDOC'
+Here we could
+write
+multi line string
+using heredoc
+END_HEREDOC
+)
+
+echo "$VAR"
+
+---------------------------------------------------------------------------
+43) Cat Multi-Line HEREDOC Text 
+
+#!/bin/bash
+
+cat<<LINUXHINT
+The current working directory is :$PWD
+You are logged in as :$(whoami)
+LINUXHINT
+
+---------------------------------------------------------------------------
+44) If Conditional Statement 
+
+#!/bin/bash
+
+VAR=8
+if [ $VAR -gt 5 ] #provide space
+then
+    echo "good"
+fi
+
+---------------------------------------------------------------------------
+45) Logical And in Conditional Statement 
+
+#!/bin/bash
+
+VAR=4
+if [[ $VAR -gt 2 ]] && [[ $VAR -lt 8 ]];
+then
+    echo "$VAR is between 2 and 8"
+fi
+
+---------------------------------------------------------------------------
+46) Logical Or in Conditional Statement 
+
+#!/bin/bash
+
+VAR=16
+if [[ $VAR -gt 5 ]] || [[ $VAR -lt 8 ]];
+then
+    echo "one condition or both are true"
+fi
+
+---------------------------------------------------------------------------
+47) If Elif Else Conditional Statement 
+
+#!/bin/bash
+
+MARKS=65
+if [ $MARKS -ge 90 ]
+then
+    echo "Excelent"
+elif [ $MARKS -ge 60 ]
+then
+    echo "Good"
+elif [ $MARKS -ge 50 ]
+then
+    echo "Just Satisfactory"   
+else
+    echo "Not ok, Fail!"
+fi	
+
+---------------------------------------------------------------------------
+48) Nesting If Conditions 
+
+#!/bin/bash
+
+VAR=6
+if [ "$VAR" -gt 1 ]
+then
+     if [ "$VAR" -lt 10 ]
+	 then 
+	     echo "The num er lies between 1 to 10"
+	 fi
+fi
+
+---------------------------------------------------------------------------
+49) Equal vs Double Equal Operator 
+
+#!/bin/bash
+
+VAR='Hello'
+RAV='world'
+if [ $VAR = $RAV ]
+then
+	if [ $VAR == $RAV ]
+	then 
+	    echo "Both equal and double equal operators are same"
+    fi
+else
+    echo "Both equal and double equal operators are not same"
+fi
+
+---------------------------------------------------------------------------
+50) Test Not Equal Strings 
+
+#!/bin/bash
+VAR='Hello'
+RAV='world'
+
+if [ $VAR != $RAV ]
+then
+	echo "Both strings are not same"
+else
+    echo "Both strings are same"
+fi
+
+---------------------------------------------------------------------------
+51) Test Two Strings Before or After alphabetically 
+
+#!/bin/bash
+VAR='Hello'
+RAV='Hello'
+
+if [ $VAR == $RAV ]
+then
+	echo "Both strings are same alphabetically"
+else
+    echo "Both strings are not same alphabetically"
+fi
+
+---------------------------------------------------------------------------
+52) Test String is Null 
+
+#!/bin/bash
+
+VAR=''
+
+if [[ $VAR = '' ]]
+then
+	echo "The strings is null"
+else
+    echo "The strings is not null"
+fi
+
+
+---------------------------------------------------------------------------
+53) Test String is Not-Null 
+
+#!/bin/bash
+
+VAR='Hello'
+
+if [[ $VAR = '' ]]
+then
+	echo "The strings is null"
+else
+    echo "The strings is not null"
+fi
+
+---------------------------------------------------------------------------
+54) Test Numerical Comparisons Greater then, Less then 
+
+#!/bin/bash
+
+VAR=15
+if [ "$VAR" -gt 10 ] && [ "$VAR" -lt 20 ]
+  then
+     echo "$VAR lies somewhere between 10 and 20."
+fi
+
+---------------------------------------------------------------------------
+55) Test Numerical Compare Greater Then Or Equal, Less Than Or Equal 
+
+#!/bin/bash
+
+VAR=25
+if [ $VAR >= 20 ] && [ $VAR <= 30 ]
+  then
+     echo "$VAR lies somewhere between 20 and 30."
+fi
+
+---------------------------------------------------------------------------
+56) Test Compare Numbers Are Equal 
+
+#!/bin/bash
+
+VAR=50
+VAR1=50
+
+if (( $VAR == $VAR1 ))
+  then
+     echo "compared variables are equal"
+	 else
+	 echo "compared variables are not equal"
+fi
+
+---------------------------------------------------------------------------
+57) Test Compare Numbers Are Not-equal 
+
+#!/bin/bash
+
+VAR=50
+VAR1=25
+
+if (( $VAR == $VAR1 )) #(( $VAR != $VAR1 ))
+  then
+     echo "compared variables are equal"
+	 else
+	 echo "compared variables are not equal"
+fi
+
+---------------------------------------------------------------------------
+58) Test File Exists 
+
+#!/bin/bash
+
+FILE=file.txt
+if [ -f "$FILE" ]
+then
+   echo "$FILE exists"
+else
+   echo "$FILE doesn't exist"
+fi
+
+---------------------------------------------------------------------------
+59) Test File Is Not Zero Size 
+
+#!/bin/bash
+FILE=file.txt
+
+if [ -s "$FILE" ]
+then
+   echo "file is not of zero size or not empty"
+else
+   echo "file is of zero size or empty"
+fi
+
+---------------------------------------------------------------------------
+60) Test File Is A Directory 
+
+#!/bin/bash
+PATH=dir
+
+if [[ -d "$FILE" ]
+then
+    echo "$PATH is a directory and not file"
+elif [[ -f $PATH ]]
+then
+    echo "$PATH is a file and not a directory"
+else
+    echo "$PATH is not valid"
+fi
+---------------------------------------------------------------------------
+61) File Is A Symbolic Link 
+
+#!/bin/bash
+FILE=link1
+
+if [[ -L "$FILE" ]]
+then
+   echo "$FILE is a symbolic link"
+else
+    echo "$FILE is not a symbolic link"
+fi
+
+---------------------------------------------------------------------------
+62) Test File Has Read Permission 
+
+#!/bin/bash
+FILE=file.txt
+
+if [[ -r "$FILE" ]]
+then
+   echo "$FILE has read permission"
+else
+    echo "$FILE doesn't have read permission"
+fi
+
+
+---------------------------------------------------------------------------
+63) Test File Has Write Permission 
+
+#!/bin/bash
+FILE=file.txt
+
+if [[ -w "$FILE" ]]
+then
+   echo "$FILE has write permission"
+else
+    echo "$FILE doesn't have write permission"
+fi
+
+---------------------------------------------------------------------------
+64) Test File Has Execute Permission 
+
+
+#!/bin/bash
+FILE=file.txt
+
+if [[ -x "$FILE" ]]
+then
+   echo "$FILE has execute permission"
+else
+    echo "$FILE doesn't have execute permission"
+fi
+
+---------------------------------------------------------------------------
+65) Case Conditional Statement With Numbers 
+
+#!/bin/bash
+VAR=10
+
+case $VAR in
+	 10)
+	    echo "it's 10"
+		;;
+	 20)
+	    echo "it's 20"
+		;;
+	 30)
+	    echo "it's 30"
+		;;
+	  *)
+	    echo "number is not 10 or 20 or 30, it's something else"
+		;;
+esac
+---------------------------------------------------------------------------
+66) Case Conditional Statement With Strings 
+
+#!/bin/bash
+CAR="BMW"
+
+case $CAR in
+	 Toyota)
+	    echo "it's Toyota"
+		;;
+	 Honda)
+	    echo "it's Honda"
+		;;
+	 BMW)
+	    echo "it's BMW"
+		;;
+	  *)
+	    echo "Hmm, seems like another car."
+		;;
+esac
+
+---------------------------------------------------------------------------
+67) Case Conditional Statement With Wildcards 
+
+#!/bin/bash
+
+case $1 in
+	 req*)
+	    echo "it's requirment or request"
+		;;
+	 meet*)
+	    echo "it's meeting"
+		;;
+	  *)
+	    echo "This is default statement"
+		;;
+esac
+---------------------------------------------------------------------------
+68) Execute a Command With Backticks
+
+#!/bin/bash
+
+chown root \dir
+---------------------------------------------------------------------------
+69) Execute a Command in a Doller Parenthesis Variable
+
+#!/bin/bash
+
+VAR=$(cat file.txt)
+echo "$VAR"
+
+---------------------------------------------------------------------------
+70) Execute a Command and Capture STDOUT
+
+#!/bin/bash
+
+VAR=$(cat file.txt)
+echo "$VAR" > output.txt
+
+---------------------------------------------------------------------------
+71) Execute a Command and Capture STDERR
+
+#!/bin/bash
+
+VAR=$(cat file.txt)
+$VAR > stderr.txt
+
+---------------------------------------------------------------------------
+72) Execute a Command and Capture Return Code
+
+#!/bin/bash
+
+VAR=$(cat file.txt)
+echo "$VAR"
+echo $? > returncode.txt
+
+---------------------------------------------------------------------------
+73) Bash Execute Command HelloWorld
+
+#!/bin/bash
+
+
+---------------------------------------------------------------------------
+74) Eval Command
+
+#!/bin/bash
+
+
+---------------------------------------------------------------------------
+75) Execute a Command With Backticks
+
+#!/bin/bash
+
+
+---------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+1)IF-Else cmd
+
+#!/bin/bash  
+  
+read -p "Enter a value:" value  
+if [ $value -gt 9 ];  
+then  
+  if [ $value -lt 11 ];  
+  then  
+     echo "$value>9, $value<11"  
+  else  
+    echo "The value you typed is greater than 9."  
+  fi  
+else echo "The value you typed is not greater than 9."  
+fi  
+
+----------------------------------------------------------------------------
+2) elseif statement
+
+#!/bin/bash  
+  
+read -p "Enter a number of quantity:" num  
+  
+if [ $num -gt 200 ];  
+then  
+echo "Eligible for 20% discount"  
+  
+elif [[ $num == 200 || $num == 100 ]];  
+then  
+echo "Lucky Draw Winner"  
+echo "Eligible to get the item for free"  
+  
+elif [[ $num -gt 100 && $num -lt 200 ]];  
+then  
+echo "Eligible for 10% discount"  
+  
+elif [ $num -lt 100 ];  
+then  
+echo "No discount"  
+fi  
